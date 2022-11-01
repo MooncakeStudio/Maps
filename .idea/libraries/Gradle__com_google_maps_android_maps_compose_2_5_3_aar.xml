@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.maps.android:maps-compose:2.5.3@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/18d2831d1e7be9c63eb58881c544d372/transformed/maps-compose-2.5.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d740174843f36d4ae4dfa02082de3002/transformed/maps-compose-2.5.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a2236fd48dc7da89ad7fd3affc0c596b/transformed/maps-compose-2.5.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0d182050d6eeb421f034692349b8d469/transformed/maps-compose-2.5.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d0d4b31c30631ca4e415e3693790e8a4/transformed/maps-compose-2.5.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9a9bdf8a5280f76539930a26214ff913/transformed/maps-compose-2.5.3/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/9a9bdf8a5280f76539930a26214ff913/transformed/maps-compose-2.5.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9a9bdf8a5280f76539930a26214ff913/transformed/maps-compose-2.5.3/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.maps.android/maps-compose/2.5.3/1353e2a09d9cb54e7c032db37e6cc7eec54aff05/maps-compose-2.5.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.maps.android/maps-compose/2.5.3/9727614cb3775557fe16072245c329006723bfdf/maps-compose-2.5.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
