@@ -62,8 +62,8 @@ fun dialog(){
                         Row(
                             modifier = Modifier.padding(all = 8.dp)
                         ) {
-                            Button(onClick = {popup = false}) {
-
+                            Button(onClick = {popup = false}, ) {
+                                Text("Confirmar")
                             }
                         }
                     }
@@ -71,5 +71,4 @@ fun dialog(){
             }
         }
     }
-
 }

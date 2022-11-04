@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
@@ -28,7 +29,12 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 import androidx.compose.material.Scaffold
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.example.myapplication.ui.theme.ListaMensajes
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -43,6 +49,7 @@ class MainActivity : ComponentActivity() {
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
 
+                /*
                 Column(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -91,12 +98,17 @@ class MainActivity : ComponentActivity() {
 
                     }
                 }
+                Column(){
+                    Text("$name")
+                }
                 Column(
-                    verticalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.End
                 ){
                     dialog()
-                }
+                }*/
+
+                ListaMensajes()
             }
         }
     }
