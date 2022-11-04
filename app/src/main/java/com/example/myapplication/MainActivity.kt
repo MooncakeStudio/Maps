@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -28,12 +27,15 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
+import androidx.compose.material.Scaffold
+import androidx.compose.ui.Alignment
 
+@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
 
     private lateinit var composeView : ComposeView
 
-    @OptIn(ExperimentalMaterial3Api::class)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -41,48 +43,59 @@ class MainActivity : ComponentActivity() {
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
 
-                Scaffold(
-                    scaffoldState = scaffoldState,
-                    topBar = {
-                             Barra(
-                                 onNavigationIconClick = {
-                                     scope.launch {
-                                         scaffoldState.drawerState.open()
-                                     }
-
-                                 }
-                             )
-                    },
-                    drawerContent = {
-                        Cosa()
-                        Cuerpo(
-                            items = listOf(
-                                Item(
-                                    id = "Home",
-                                    title = "Home",
-                                    contentDescription = "A casita",
-                                    icon = Icons.Default.Home
-                                ),
-                                Item(
-                                    id = "Settings",
-                                    title = "Settings",
-                                    contentDescription = "La opsione",
-                                    icon = Icons.Default.Settings
-                                ),
-                                Item(
-                                    id = "Contact",
-                                    title = "Contacto",
-                                    contentDescription = "Ponganse en contacto",
-                                    icon = Icons.Default.Call
-                                )
-                            ),
-                            onItemClick = {
-                                println("Clicked on ${it.title}")
-                            }
-                        )
-                    }
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Scaffold(
+                        scaffoldState = scaffoldState,
+                        topBar = {
+                            Barra(
+                                onNavigationIconClick = {
+                                    scope.launch {
+                                        scaffoldState.drawerState.open()
+                                    }
 
+                                }
+                            )
+                        },
+                        drawerContent = {
+                            Cosa()
+                            Cuerpo(
+                                items = listOf(
+                                    Item(
+                                        id = "Home",
+                                        title = "Home",
+                                        contentDescription = "A casita",
+                                        icon = Icons.Default.Home
+                                    ),
+                                    Item(
+                                        id = "Settings",
+                                        title = "Settings",
+                                        contentDescription = "La opsione",
+                                        icon = Icons.Default.Settings
+                                    ),
+                                    Item(
+                                        id = "Contact",
+                                        title = "Contacto",
+                                        contentDescription = "Ponganse en contacto",
+                                        icon = Icons.Default.Call
+                                    )
+                                ),
+                                onItemClick = {
+                                    println("Clicked on ${it.title}")
+                                }
+                            )
+                        }
+                    ) {
+
+                    }
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End
+                ){
+                    dialog()
                 }
             }
         }
@@ -107,4 +120,70 @@ fun mapa(){
             snippet = "Marker in Singapore"
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun preview(){
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+
+    Column(
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Scaffold(
+            scaffoldState = scaffoldState,
+            topBar = {
+                Barra(
+                    onNavigationIconClick = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
+
+                    }
+                )
+            },
+            drawerContent = {
+                Cosa()
+                Cuerpo(
+                    items = listOf(
+                        Item(
+                            id = "Home",
+                            title = "Home",
+                            contentDescription = "A casita",
+                            icon = Icons.Default.Home
+                        ),
+                        Item(
+                            id = "Settings",
+                            title = "Settings",
+                            contentDescription = "La opsione",
+                            icon = Icons.Default.Settings
+                        ),
+                        Item(
+                            id = "Contact",
+                            title = "Contacto",
+                            contentDescription = "Ponganse en contacto",
+                            icon = Icons.Default.Call
+                        )
+                    ),
+                    onItemClick = {
+                        println("Clicked on ${it.title}")
+                    }
+                )
+            }
+        ) {
+
+        }
+    }
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.End
+    ){
+        dialog()
+    }
+
+
+
 }

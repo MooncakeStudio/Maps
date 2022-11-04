@@ -5,7 +5,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.*
@@ -23,9 +22,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
+import androidx.compose.material.TextField
 
 @Composable
 fun PopupCenterWindowDemo() {
+
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
@@ -59,49 +60,41 @@ fun PopupCenterWindowDemo() {
                     popupPositionProvider = WindowCenterOffsetPositionProvider(),
                     onDismissRequest = { popup = false },
                 ) {
-                    Surface(
-                        //border = BorderStroke(1.dp, MaterialTheme.colors.secondary),
-                        //border = BorderStroke(1.dp, Color.Blue),
-                        border= BorderStroke(1.dp,MaterialTheme.colorScheme.secondary),
-                        shape = RoundedCornerShape(8.dp),
-                        color = Color(0xCCEEEEEE),
+                    Column(
+                        modifier = Modifier.padding(100.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Column(
-                            modifier = Modifier.padding(100.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            /*
-                            TextField(
-                                value = text,
-                                onValueChange = {
-                                    text = it
-                                },
-                                label = { Text("Label") },
+                        /*
+                        TextField(
+                            value = text,
+                            onValueChange = {
+                                text = it
+                            },
+                            label = { Text("Label") },
 
-                            )
-                            */
-                            TextField(
-                                value = text,
-                                label = { Text(text = "Number Input Type") },
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                                onValueChange = { it ->
-                                    text = it
-                                }
-                            )
-                            TextField(
-                                value = text,
-                                onValueChange = {
-                                    text = it
-                                },
-                                label = { Text(text = "Your Label") },
-                                placeholder = { Text(text = "Your Placeholder/Hint") },
-                            )
-
-                            //Text(text = "I'm popping up")
-                            Spacer(modifier = Modifier.height(32.dp))
-                            TextButton(onClick = { popup = false }) {
-                                Text(text = "Close Popup")
+                        )
+                        */
+                        TextField(
+                            value = text,
+                            label = { Text(text = "Number Input Type") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            onValueChange = {
+                                text = it
                             }
+                        )
+                        TextField(
+                            value = text,
+                            onValueChange = {
+                                text = it
+                            },
+                            label = { Text(text = "Your Label") },
+                            placeholder = { Text(text = "Your Placeholder/Hint") },
+                        )
+
+                        //Text(text = "I'm popping up")
+                        Spacer(modifier = Modifier.height(32.dp))
+                        TextButton(onClick = { popup = false }) {
+                            Text(text = "Close Popup")
                         }
                     }
                 }
