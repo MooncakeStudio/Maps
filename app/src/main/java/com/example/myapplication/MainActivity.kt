@@ -95,7 +95,8 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.End
                 ){
-                    dialog()
+                    dialog(this@MainActivity)
+
                 }
             }
         }
@@ -167,6 +168,7 @@ fun preview(){
                             contentDescription = "Ponganse en contacto",
                             icon = Icons.Default.Call
                         )
+
                     ),
                     onItemClick = {
                         println("Clicked on ${it.title}")
@@ -181,7 +183,7 @@ fun preview(){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End
     ){
-        dialog()
+        //dialog()
     }
 
 

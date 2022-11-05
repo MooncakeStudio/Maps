@@ -1,29 +1,29 @@
 package com.example.myapplication
 
-import android.widget.Button
-import androidx.compose.ui.platform.LocalContext
+import android.content.Context
+import android.content.Intent
+import android.view.View
+import androidx.compose.runtime.Composable
+import androidx.core.content.ContextCompat.startActivity
 
-fun Compartir(){
-/*
-    Button(
-        onShareClick = {
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.EditText
+import java.security.AccessController.getContext
 
-            val context = LocalContext.current
 
-            val type = "text/plain"
-            val subject = "Your subject"
-            val extraText = "https://www.google.com/codes/${variable.id}"
-            val shareWith = "ShareWith"
 
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = type
-            intent.putExtra(Intent.EXTRA_SUBJECT, subject)
-            intent.putExtra(Intent.EXTRA_TEXT, extraText)
+fun Compartir(context: Context){
 
-            ContextCompat.startActivity(
-                context,
-                Intent.createChooser(intent, shareWith),
-                null
-            )
-        })*/
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    context.startActivity(shareIntent)
+
+
+
 }
