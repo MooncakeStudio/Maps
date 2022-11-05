@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun dialog(){
+fun dialog(pos:String){
     var popup by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf("")}
 
@@ -32,7 +32,8 @@ fun dialog(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 IconButton(
-                    onClick = { popup = true},
+                    onClick = { popup = true;
+                              println(pos)},
                     modifier = Modifier.dashedBorder(1.dp, 5.dp, Color.DarkGray)
                 )
                 {
@@ -52,9 +53,13 @@ fun dialog(){
                     title = { Text(text = "Add")},
                     text = {
                         Column() {
+                            Text(text = pos)
+                        }
+                        Column() {
                             TextField(
                                 value = text,
-                                onValueChange = {text = it}
+                                onValueChange = {text = it},
+                                placeholder = { Text(text = "")}
                             )
                         }
                     },
@@ -62,7 +67,11 @@ fun dialog(){
                         Row(
                             modifier = Modifier.padding(all = 8.dp)
                         ) {
-                            Button(onClick = {popup = false}) {
+                            Button(onClick =
+                            {
+                                popup = false;
+                                //println(pos)
+                            }) {
 
                             }
                         }
@@ -71,5 +80,8 @@ fun dialog(){
             }
         }
     }
+}
 
+fun saveText(input:String){
+    
 }
