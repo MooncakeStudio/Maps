@@ -18,7 +18,6 @@ fun Barra(
         navigationIcon = {
             IconButton(onClick = onNavigationIconClick) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Toggle drawer")
-
             }
         }
 

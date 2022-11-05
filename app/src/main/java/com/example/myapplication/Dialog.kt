@@ -13,62 +13,67 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+//@Preview(showSystemUi = true)
 @Composable
-fun dialog(){
+fun dialog(estadoListaUbis: List<Tarjeta>, onAddTarjeta: (String) -> Unit) {
     var popup by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf("")}
+    var text by remember { mutableStateOf("") }
+    var estadoTexto by remember {mutableStateOf("")}
 
-    Box(
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 32.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                IconButton(
-                    onClick = { popup = true},
-                    modifier = Modifier.dashedBorder(1.dp, 5.dp, Color.DarkGray)
-                )
-                {
-                    Icon(
-                        Icons.Filled.AddCircle, contentDescription="h",
-                        tint= Color.DarkGray,
-                        modifier= Modifier.size(height=20.dp, width=300.dp)
-                    )
-                }
-            }
 
+        IconButton(
+            onClick = { popup = true },
+            modifier = Modifier.dashedBorder(1.dp, 5.dp, Color.DarkGray)
+        )
+        {
+            Icon(
+                Icons.Filled.AddCircle, contentDescription = "h",
+                tint = Color.DarkGray,
+                modifier = Modifier.size(height = 20.dp, width = 300.dp)
+            )
+        }
 
-            if(popup){
-                AlertDialog(
+        if (popup) {
+            AlertDialog(
+                onDismissRequest = { popup = false },
+                title = { Text(text = "Add") },
+                text = {
+                    Column() {
 
-                    onDismissRequest = {popup = false},
-                    title = { Text(text = "Add")},
-                    text = {
-                        Column() {
-                            TextField(
-                                value = text,
-                                onValueChange = {text = it}
-                            )
-                        }
-                    },
-                    confirmButton = {
-                        Row(
-                            modifier = Modifier.padding(all = 8.dp)
-                        ) {
-                            Button(onClick = {popup = false}, ) {
-                                Text("Confirmar")
-                            }
+                        TextField(
+                            value = estadoTexto,
+                            onValueChange = { estadoTexto = it }
+                        )
+                    }
+                },
+                confirmButton = {
+                    Row(
+                        modifier = Modifier.padding(all = 8.dp)
+                    ) {
+                        Button(onClick = {
+                            onAddTarjeta(estadoTexto)
+                            popup = false }) {
+                            Text("Confirmar")
                         }
                     }
-                )
-            }
+                }
+            )
         }
+
     }
+}
+
+@Composable
+fun cargaInput() {
+
 }

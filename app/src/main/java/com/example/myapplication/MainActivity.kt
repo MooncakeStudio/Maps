@@ -13,8 +13,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -29,95 +27,85 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import com.example.myapplication.ui.theme.ListaMensajes
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
-
-    private lateinit var composeView : ComposeView
-
-
+    private lateinit var composeView: ComposeView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {
-                val scaffoldState = rememberScaffoldState()
-                val scope = rememberCoroutineScope()
+                var estadoListaUbis by remember { mutableStateOf(listOf<Tarjeta>()) }
 
-                /*
-                Column(
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Scaffold(
-                        scaffoldState = scaffoldState,
-                        topBar = {
-                            Barra(
-                                onNavigationIconClick = {
-                                    scope.launch {
-                                        scaffoldState.drawerState.open()
-                                    }
-
-                                }
-                            )
-                        },
-                        drawerContent = {
-                            Cosa()
-                            Cuerpo(
-                                items = listOf(
-                                    Item(
-                                        id = "Home",
-                                        title = "Home",
-                                        contentDescription = "A casita",
-                                        icon = Icons.Default.Home
-                                    ),
-                                    Item(
-                                        id = "Settings",
-                                        title = "Settings",
-                                        contentDescription = "La opsione",
-                                        icon = Icons.Default.Settings
-                                    ),
-                                    Item(
-                                        id = "Contact",
-                                        title = "Contacto",
-                                        contentDescription = "Ponganse en contacto",
-                                        icon = Icons.Default.Call
-                                    )
-                                ),
-                                onItemClick = {
-                                    println("Clicked on ${it.title}")
-                                }
-                            )
-                        }
-                    ) {
-
-                    }
+                cargarMenuPrincipal(estadoListaUbis)
+                dialog(estadoListaUbis) { item ->
+                    var nuevaTarjeta = Tarjeta(item)
+                    estadoListaUbis += listOf(nuevaTarjeta)
                 }
-                Column(){
-                    Text("$name")
-                }
-                Column(
-                    verticalArrangement = Arrangement.Bottom,
-                    horizontalAlignment = Alignment.End
-                ){
-                    dialog()
-                }*/
-
-                ListaMensajes()
             }
         }
     }
 }
 
+@ExperimentalMaterial3Api
+@Composable
+fun cargarMenuPrincipal(estadoListaUbis: List<Tarjeta>) {
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
 
+    /*Column(
+        modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth()
+    ) {*/
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            Barra(
+                onNavigationIconClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }
+            )
+        },
+        drawerContent = {
+            Cuerpo(
+                items = listOf(
+                    Item(
+                        id = "Home",
+                        title = "Home",
+                        contentDescription = "A casita",
+                        icon = Icons.Default.Home
+                    ),
+                    Item(
+                        id = "Settings",
+                        title = "Settings",
+                        contentDescription = "La opsione",
+                        icon = Icons.Default.Settings
+                    ),
+                    Item(
+                        id = "Contact",
+                        title = "Contacto",
+                        contentDescription = "Ponganse en contacto",
+                        icon = Icons.Default.Call
+                    )
+                ),
+                onItemClick = {
+                    println("Clicked on ${it.title}")
+                }
+            )
+        }
+    ) {
+        InterfazLista(estadoListaUbis)
+    }
+}
+/*}*/
 
 @Composable
-fun mapa(){
+fun mapa() {
     val singapore = LatLng(1.35, 103.87)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(singapore, 10f)
@@ -134,68 +122,25 @@ fun mapa(){
     }
 }
 
+@Composable
+fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
+    LazyColumn {
+        items(estadoListaUbis.size) { index ->
+            Text(estadoListaUbis[index].nombre)
+        }
+    }
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun preview(){
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
+fun preview() {
+    var estadoListaUbis by remember { mutableStateOf(listOf<Tarjeta>()) }
 
-    Column(
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Scaffold(
-            scaffoldState = scaffoldState,
-            topBar = {
-                Barra(
-                    onNavigationIconClick = {
-                        scope.launch {
-                            scaffoldState.drawerState.open()
-                        }
-
-                    }
-                )
-            },
-            drawerContent = {
-                Cosa()
-                Cuerpo(
-                    items = listOf(
-                        Item(
-                            id = "Home",
-                            title = "Home",
-                            contentDescription = "A casita",
-                            icon = Icons.Default.Home
-                        ),
-                        Item(
-                            id = "Settings",
-                            title = "Settings",
-                            contentDescription = "La opsione",
-                            icon = Icons.Default.Settings
-                        ),
-                        Item(
-                            id = "Contact",
-                            title = "Contacto",
-                            contentDescription = "Ponganse en contacto",
-                            icon = Icons.Default.Call
-                        )
-                    ),
-                    onItemClick = {
-                        println("Clicked on ${it.title}")
-                    }
-                )
-            }
-        ) {
-
-        }
+    cargarMenuPrincipal(estadoListaUbis)
+    dialog(estadoListaUbis) { item ->
+        var nuevaTarjeta = Tarjeta(item)
+        estadoListaUbis += listOf(nuevaTarjeta)
     }
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.End
-    ){
-        dialog()
-    }
-
-
-
 }
