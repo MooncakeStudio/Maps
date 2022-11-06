@@ -21,9 +21,8 @@ fun Compartir(context: Context){
         type = "text/plain"
     }
 
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    context.startActivity(shareIntent)
-
-
+    val shareIntent = Intent.createChooser(sendIntent, "null")
+    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    MainActivity.appContext.startActivity(shareIntent)
 
 }

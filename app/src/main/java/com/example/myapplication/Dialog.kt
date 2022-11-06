@@ -2,8 +2,10 @@ package com.example.myapplication
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.widget.Toast
@@ -103,6 +105,15 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                         GoogleMap(
                             modifier = Modifier.size(350.dp,200.dp),
                             cameraPositionState = CameraPositionState(CameraPosition.fromLatLngZoom(text, 15f)),
+                            onMapClick = {
+                                val uri = Uri.parse("geo:"+MainActivity.currentLocation.latitude+","+MainActivity.currentLocation.longitude)
+                                val mapIntent = Intent(Intent.ACTION_VIEW,uri)
+                                mapIntent.setPackage("com.google.android.apps.maps")
+                                mapIntent.resolveActivity(MainActivity.appContext.packageManager)?.let {
+                                    mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    MainActivity.appContext.startActivity(mapIntent)
+                                }
+                            }
                         ){
                             Marker(
                                 state = MarkerState(position = MainActivity.currentLocation),

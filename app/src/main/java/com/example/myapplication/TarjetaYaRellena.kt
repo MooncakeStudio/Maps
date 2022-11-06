@@ -1,19 +1,28 @@
 package com.example.myapplication
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -25,17 +34,56 @@ fun abrirTarjetaRellena(estaTarjetaVal:Tarjeta,nombreVal:TextFieldValue): Boolea
     val maxCharNombre=50
 
     if (popupRelleno){
+
         AlertDialog(
             properties = DialogProperties(usePlatformDefaultWidth = false),
             modifier= Modifier.wrapContentHeight(),
             onDismissRequest = { popupRelleno = false },
-            title = { Text(text = "Add") },
+            title = { Text(text = "Modify") },
             text = {
-                   TextField(
-                       //value = nombre,
-                       value=nombre,
-                       onValueChange = { if (it.text.length <= maxCharNombre) nombre= it })
-
+                Column(){
+                    GoogleMap(
+                        modifier = Modifier.size(350.dp,200.dp),
+                        cameraPositionState = CameraPositionState(CameraPosition.fromLatLngZoom(MainActivity.currentLocation, 15f)),
+                        onMapClick = {
+                            val uri = Uri.parse("geo:"+MainActivity.currentLocation.latitude+","+MainActivity.currentLocation.longitude)
+                            val mapIntent = Intent(Intent.ACTION_VIEW,uri)
+                            mapIntent.setPackage("com.google.android.apps.maps")
+                            mapIntent.resolveActivity(MainActivity.appContext.packageManager)?.let {
+                                mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                MainActivity.appContext.startActivity(mapIntent)
+                            }
+                        }
+                    ){
+                        Marker(
+                            state = MarkerState(position = MainActivity.currentLocation),
+                            title = textoBonito(location = MainActivity.currentLocation),
+                            snippet = "Marker in "+ ciudad(MainActivity.currentLocation)
+                        )
+                    }
+                    TextField(
+                        //value = nombre,
+                        value=nombre,
+                        onValueChange = { if (it.text.length <= maxCharNombre) nombre= it },
+                        textStyle = LocalTextStyle.current.copy(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 30.sp,
+                            lineHeight=30.sp //Interlineado
+                        ),trailingIcon = {
+                            Icon(
+                                Icons.Default.Clear,
+                                contentDescription = "clear text",
+                                modifier = Modifier
+                                    .clickable {
+                                        nombre=TextFieldValue("")
+                                    }
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent
+                        )
+                    )
+                }
 
             },
 
@@ -54,9 +102,12 @@ fun abrirTarjetaRellena(estaTarjetaVal:Tarjeta,nombreVal:TextFieldValue): Boolea
             dismissButton = {
                 TextButton(
                     onClick = {
-
+                        nombre=TextFieldValue("")
+                        popupRelleno = false
                     },modifier = Modifier.padding(all =0.dp)
-                ) { Text("Dismiss") }
+                ) {
+                    Text("Dismiss")
+                }
             }
         )
         println("Lanzar Popup "+ popupRelleno)
