@@ -1,6 +1,11 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Address
+import android.location.Geocoder
+import android.os.Build
+import android.os.Handler
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,8 +30,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import kotlinx.coroutines.delay
+import java.util.*
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.seconds
 
+
+@SuppressLint("MissingPermission")
+fun lastLocation() {
+    var location =
+        LocationServices.getFusedLocationProviderClient(MainActivity.appContext).lastLocation
+            .addOnCompleteListener { task ->
+                task.addOnSuccessListener { result ->
+                    MainActivity.currentLocation = LatLng(result.latitude, result.longitude)
+                }
+
+            }
+}
 //@Preview(showSystemUi = true)
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -46,13 +73,14 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
 
         IconButton(
             onClick = {
-                var location = MainActivity.instance
-                text = location.devolverPosicion(MainActivity.appContext)
-                if(!text.latitude.equals(0.0) || !text.longitude.equals(0.0)){
+                lastLocation()
+                text = MainActivity.currentLocation
+                popup = true
+                /*if(!text.latitude.equals(0.0) || !text.longitude.equals(0.0)){
                     popup = true
                 }else{
-                    Toast.makeText(MainActivity.appContext,"¿Seguro que le has dado? Intentalo de nuevo", Toast.LENGTH_SHORT).show()
-                }
+                    Toast.makeText(MainActivity.appContext,"¿Seguro que le has dado? Inténtalo de nuevo", Toast.LENGTH_SHORT).show()
+                }*/
             },
             modifier = Modifier.dashedBorder(1.dp, 5.dp, Color.DarkGray)
         )
@@ -72,6 +100,16 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                 title = { Text(text = "Add") },
                 text = {
                     Column() {
+                        GoogleMap(
+                            modifier = Modifier.size(350.dp,200.dp),
+                            cameraPositionState = CameraPositionState(CameraPosition.fromLatLngZoom(text, 15f)),
+                        ){
+                            Marker(
+                                state = MarkerState(position = MainActivity.currentLocation),
+                                title = textoBonito(location = MainActivity.currentLocation),
+                                snippet = "Marker in "+ ciudad(MainActivity.currentLocation)
+                            )
+                        }
                         val maxChar=50
                         TextField(
                             value = estadoTexto,
@@ -96,13 +134,17 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                         Text(
                             text = "${estadoTexto.text.length} / $maxChar",
                             textAlign = TextAlign.End,
-                            modifier = Modifier.fillMaxWidth().padding(end = 16.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 16.dp)
                         )
 
                         Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
                             OutlinedButton(
                                 onClick ={ Compartir(context)},
-                                modifier=Modifier.background(Color.Transparent).padding(top=25.dp, bottom=0.dp),
+                                modifier= Modifier
+                                    .background(Color.Transparent)
+                                    .padding(top = 25.dp, bottom = 0.dp),
                                 shape = RoundedCornerShape(50)
                             ){
                                 Row{
@@ -142,3 +184,31 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
             )
         }
     }}
+
+@Composable
+fun textoBonito(location : LatLng) :String{
+    var gecoder = Geocoder(MainActivity.appContext, Locale.getDefault())
+    var direccionesPosibles by remember { mutableStateOf(listOf<Address>())}
+    if(Build.VERSION.SDK_INT >= 33){
+        gecoder.getFromLocation(location.latitude,location.longitude,1,
+            Geocoder.GeocodeListener { addresses ->  direccionesPosibles = addresses})
+    }else{
+        direccionesPosibles = gecoder.getFromLocation(location.latitude,location.longitude,1) as List<Address>
+    }
+
+    return direccionesPosibles[0].getAddressLine(0)
+}
+
+@Composable
+fun ciudad(location : LatLng) :String{
+    var gecoder = Geocoder(MainActivity.appContext, Locale.getDefault())
+    var direccionesPosibles by remember { mutableStateOf(listOf<Address>())}
+    if(Build.VERSION.SDK_INT >= 33){
+        gecoder.getFromLocation(location.latitude,location.longitude,1,
+            Geocoder.GeocodeListener { addresses ->  direccionesPosibles = addresses})
+    }else{
+        direccionesPosibles = gecoder.getFromLocation(location.latitude,location.longitude,1) as List<Address>
+    }
+
+    return direccionesPosibles[0].locality
+}

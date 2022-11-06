@@ -6,9 +6,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -43,26 +45,35 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getSystemService
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.CameraPosition
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
 
     private lateinit var composeView: ComposeView
-    var currentLocation: LatLng = LatLng(0.0, 0.0)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MainActivity.appContext = applicationContext
+
+
         setContent {
             MyApplicationTheme {
                 cargarMenuPrincipal()
-
-
             }
         }
+    }
+
+    @ExperimentalMaterial3Api
+    @Composable
+    fun cargando(){
+        Text(text = "Cargando...")
     }
 
     @ExperimentalMaterial3Api
@@ -123,11 +134,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    val locationListener = android.location.LocationListener {
+            location -> currentLocation = LatLng(location.latitude,location.longitude); println("Por lo menos estoy aqui"); }
 
+
+    @SuppressLint("MissingPermission")
     fun mapPosition() {
         if(checkPermissions()){
             if(locationEnabled()){
-                canMap = true
+                var location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if(currentLocation.latitude.equals(1.35) && currentLocation.longitude.equals(103.87)){
+                    location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0L,0f,locationListener)
+                }
+
             }else{
                 Toast.makeText(this,"Turn on location", Toast.LENGTH_SHORT).show()
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
@@ -144,6 +163,7 @@ class MainActivity : ComponentActivity() {
         val instance = MainActivity()
         lateinit var appContext :Context
         var canMap : Boolean = false
+        var currentLocation: LatLng = LatLng(1.35, 103.87)
     }
 
     fun checkPermissions() : Boolean{
@@ -157,11 +177,14 @@ class MainActivity : ComponentActivity() {
         return false
     }
 
+
     fun locationEnabled() : Boolean{
         val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
+
+
 
     fun requestPermission(){
         ActivityCompat.requestPermissions(this,
@@ -172,7 +195,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("MissingPermission")
     fun devolverPosicion(context: Context):LatLng{
         if(canMap){
-            var location = LocationServices.getFusedLocationProviderClient(context).lastLocation
+            var location = LocationServices.getFusedLocationProviderClient(appContext).lastLocation
                 .addOnCompleteListener {task->
                     task.addOnSuccessListener { result ->
                         currentLocation = LatLng(result.latitude,result.longitude)
@@ -208,7 +231,7 @@ fun mapa() {
 fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
     var lanzarPopup by remember { mutableStateOf(false) }
     var nombre by remember {mutableStateOf(TextFieldValue())}
-    var estaTarjeta by remember { mutableStateOf(Tarjeta(""))}
+    var estaTarjeta by remember { mutableStateOf(Tarjeta("","",0.0,0.0))}
 
     LazyColumn (Modifier.padding(start=8.dp)){
         items(estadoListaUbis.size) { index ->
@@ -222,7 +245,7 @@ fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
                 direccionesPosibles = gecoder.getFromLocation(estadoListaUbis[index].altitud,estadoListaUbis[index].latitud,1) as List<Address>
             }
 
-            var text : String = direccionesPosibles.get(0).getAddressLine(0)
+            var text : String = direccionesPosibles[0].getAddressLine(0)
 
             
             Button(onClick={
