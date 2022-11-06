@@ -30,7 +30,7 @@ fun dialog(estadoListaUbis: List<Tarjeta>, onAddTarjeta: (String) -> Unit) {
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        
         IconButton(
             onClick = { popup = true },
             modifier = Modifier.dashedBorder(1.dp, 5.dp, Color.DarkGray)
@@ -69,11 +69,3 @@ fun dialog(estadoListaUbis: List<Tarjeta>, onAddTarjeta: (String) -> Unit) {
                 }
             )
         }
-
-    }
-}
-
-@Composable
-fun cargaInput() {
-
-}
