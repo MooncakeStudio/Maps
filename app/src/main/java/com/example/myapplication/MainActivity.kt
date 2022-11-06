@@ -35,12 +35,14 @@ import com.google.android.gms.maps.model.CameraPosition.*
 import kotlinx.coroutines.CoroutineScope
 import androidx.core.app.ActivityCompat
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.model.CameraPosition
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     private lateinit var composeView: ComposeView
-    var currentLocation : LatLng = LatLng(0.0,0.0)
+    var currentLocation: LatLng = LatLng(0.0, 0.0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -48,13 +50,14 @@ class MainActivity : ComponentActivity() {
                 var estadoListaUbis by remember { mutableStateOf(listOf<Tarjeta>()) }
 
                 cargarMenuPrincipal(estadoListaUbis)
-                dialog(estadoListaUbis) { item ->
+                dialog(context=this@MainActivity,estadoListaUbis) { item ->
                     var nuevaTarjeta = Tarjeta(item)
                     estadoListaUbis += listOf(nuevaTarjeta)
                 }
             }
         }
     }
+}
 
 @ExperimentalMaterial3Api
 @Composable
@@ -136,7 +139,7 @@ fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
     }
 }
 
-
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
@@ -149,3 +152,4 @@ fun preview() {
         estadoListaUbis += listOf(nuevaTarjeta)
     }
 }
+*/
