@@ -24,14 +24,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.google.android.gms.maps.model.LatLng
 
 //@Preview(showSystemUi = true)
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (String) -> Unit) {
     var popup by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf("") }
+    var text by remember { mutableStateOf(LatLng(0.0,0.0)) }
     var estadoTexto by remember {mutableStateOf(TextFieldValue())}
+
 
     Column(
         modifier = Modifier
@@ -42,7 +44,13 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (String
     ) {
 
         IconButton(
-            onClick = { popup = true },
+            onClick = {
+                var location = MainActivity.instance
+                text = location.devolverPosicion(MainActivity.appContext)
+                if(!text.equals("(0.0)(0.0)")){
+                    popup = true
+                }
+            },
             modifier = Modifier.dashedBorder(1.dp, 5.dp, Color.DarkGray)
         )
         {

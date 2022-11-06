@@ -41,76 +41,144 @@ import com.google.android.gms.maps.model.CameraPosition
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
+
     private lateinit var composeView: ComposeView
     var currentLocation: LatLng = LatLng(0.0, 0.0)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MainActivity.appContext = applicationContext
         setContent {
             MyApplicationTheme {
-                var estadoListaUbis by remember { mutableStateOf(listOf<Tarjeta>()) }
+                cargarMenuPrincipal()
 
-                cargarMenuPrincipal(estadoListaUbis)
-                dialog(context=this@MainActivity,estadoListaUbis) { item ->
-                    var nuevaTarjeta = Tarjeta(item)
-                    estadoListaUbis += listOf(nuevaTarjeta)
-                }
+
             }
         }
     }
-}
+    @ExperimentalMaterial3Api
+    @Composable
+    fun cargarMenuPrincipal() {
+        val scaffoldState = rememberScaffoldState()
+        val scope = rememberCoroutineScope()
+        var estadoListaUbis by remember { mutableStateOf(listOf<Tarjeta>()) }
 
-@ExperimentalMaterial3Api
-@Composable
-fun cargarMenuPrincipal(estadoListaUbis: List<Tarjeta>) {
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
-
-    /*Column(
+        /*Column(
         modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth()
     ) {*/
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            Barra(
-                onNavigationIconClick = {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
+        Scaffold(
+            scaffoldState = scaffoldState,
+            topBar = {
+                Barra(
+                    onNavigationIconClick = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
                     }
-                }
-            )
-        },
-        drawerContent = {
-            Cuerpo(
-                items = listOf(
-                    Item(
-                        id = "Home",
-                        title = "Home",
-                        contentDescription = "A casita",
-                        icon = Icons.Default.Home
+                )
+            },
+            drawerContent = {
+                Cuerpo(
+                    items = listOf(
+                        Item(
+                            id = "Home",
+                            title = "Home",
+                            contentDescription = "A casita",
+                            icon = Icons.Default.Home
+                        ),
+                        Item(
+                            id = "Settings",
+                            title = "Settings",
+                            contentDescription = "La opsione",
+                            icon = Icons.Default.Settings
+                        ),
+                        Item(
+                            id = "Contact",
+                            title = "Contacto",
+                            contentDescription = "Ponganse en contacto",
+                            icon = Icons.Default.Call
+                        )
                     ),
-                    Item(
-                        id = "Settings",
-                        title = "Settings",
-                        contentDescription = "La opsione",
-                        icon = Icons.Default.Settings
-                    ),
-                    Item(
-                        id = "Contact",
-                        title = "Contacto",
-                        contentDescription = "Ponganse en contacto",
-                        icon = Icons.Default.Call
-                    )
-                ),
-                onItemClick = {
-                    println("Clicked on ${it.title}")
-                }
-            )
+                    onItemClick = {
+                        println("Clicked on ${it.title}")
+                    }
+                )
+            }
+        ) {
+            mapPosition()
+            InterfazLista(estadoListaUbis)
+            dialog(context = MainActivity.appContext, estadoListaUbis) { item ->
+                var nuevaTarjeta = Tarjeta(item)
+                estadoListaUbis += listOf(nuevaTarjeta)
+            }
         }
-    ) {
-        InterfazLista(estadoListaUbis)
     }
-}
+
+
+    fun mapPosition() {
+        if(checkPermissions()){
+            if(locationEnabled()){
+                canMap = true
+            }else{
+                Toast.makeText(this,"Turn on location", Toast.LENGTH_SHORT).show()
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+            }
+        }else{
+            requestPermission()
+        }
+
+    }
+
+    companion object{
+        private const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
+        val instance = MainActivity()
+        lateinit var appContext :Context
+        var canMap : Boolean = false
+    }
+
+    fun checkPermissions() : Boolean{
+        if(ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED){
+            return true
+        }
+        return false
+    }
+
+    fun locationEnabled() : Boolean{
+        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    fun requestPermission(){
+        ActivityCompat.requestPermissions(this,
+            arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
+            PERMISSION_REQUEST_ACCESS_LOCATION)
+    }
+
+    @SuppressLint("MissingPermission")
+    fun devolverPosicion(context: Context):LatLng{
+        if(canMap){
+            var location = LocationServices.getFusedLocationProviderClient(context).lastLocation
+                .addOnCompleteListener {task->
+                    task.addOnSuccessListener { result ->
+                        currentLocation = LatLng(result.latitude,result.longitude)
+                    }
+
+
+                }
+        }
+
+        return currentLocation
+    }
+
 /*}*/
+}
 
 @Composable
 fun mapa() {
