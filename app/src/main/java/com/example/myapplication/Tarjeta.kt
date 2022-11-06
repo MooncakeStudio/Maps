@@ -1,17 +1,17 @@
 package com.example.myapplication
 
-class Tarjeta(nombre: String) {
+class Tarjeta(nombre: String, descripcion: String, altitud: Double, latitud: Double) {
     var nombre: String = nombre
-    var descripcion: String = ""
+    var descripcion: String = descripcion
 
-    var altitud: Int = 0
-    var latitud: Int = 0
+    var altitud: Double = altitud
+    var latitud: Double = latitud
 
     // Constructor
 
-    constructor(nombre: String, descripcion: String, altitud: Int, latitud: Int) : this(nombre){
+    /*constructor(nombre: String, descripcion: String, altitud: Int, latitud: Int) : this(nombre){
         this.descripcion = descripcion
         this.altitud = altitud
         this.latitud = latitud
-    }
+    }*/
 }

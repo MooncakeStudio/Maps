@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,7 +30,7 @@ import com.google.android.gms.maps.model.LatLng
 //@Preview(showSystemUi = true)
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (String) -> Unit) {
+fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjeta) -> Unit) {
     var popup by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(LatLng(0.0,0.0)) }
     var estadoTexto by remember {mutableStateOf(TextFieldValue())}
@@ -47,8 +48,10 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (String
             onClick = {
                 var location = MainActivity.instance
                 text = location.devolverPosicion(MainActivity.appContext)
-                if(!text.equals("(0.0)(0.0)")){
+                if(!text.latitude.equals(0.0) || !text.longitude.equals(0.0)){
                     popup = true
+                }else{
+                    Toast.makeText(MainActivity.appContext,"¿Seguro que le has dado? Intentalo de nuevo", Toast.LENGTH_SHORT).show()
                 }
             },
             modifier = Modifier.dashedBorder(1.dp, 5.dp, Color.DarkGray)
@@ -119,7 +122,8 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (String
                         modifier = Modifier.padding(all =0.dp)
                     ) {
                         TextButton(onClick = {
-                            onAddTarjeta(estadoTexto.text)
+                            var item = Tarjeta(estadoTexto.text,"",text.latitude,text.longitude)
+                            onAddTarjeta(item)
                             estadoTexto=TextFieldValue("")
                             popup = false
                         }) {Text("Confirm")}

@@ -4,12 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.CameraPosition
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -57,6 +62,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     @ExperimentalMaterial3Api
     @Composable
     fun cargarMenuPrincipal() {
@@ -109,8 +115,8 @@ class MainActivity : ComponentActivity() {
             mapPosition()
             InterfazLista(estadoListaUbis)
             dialog(context = MainActivity.appContext, estadoListaUbis) { item ->
-                var nuevaTarjeta = Tarjeta(item)
-                estadoListaUbis += listOf(nuevaTarjeta)
+                //var nuevaTarjeta = Tarjeta(item)
+                estadoListaUbis += listOf(item)
             }
         }
     }
@@ -169,8 +175,6 @@ class MainActivity : ComponentActivity() {
                     task.addOnSuccessListener { result ->
                         currentLocation = LatLng(result.latitude,result.longitude)
                     }
-
-
                 }
         }
 
@@ -202,10 +206,24 @@ fun mapa() {
 fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
     LazyColumn {
         items(estadoListaUbis.size) { index ->
-            Text(estadoListaUbis[index].nombre)
+            Text(estadoListaUbis[index].nombre);
+            var gecoder = Geocoder(MainActivity.appContext, Locale.getDefault())
+            var direccionesPosibles by remember { mutableStateOf(listOf<Address>())}
+            if(Build.VERSION.SDK_INT >= 33){
+                gecoder.getFromLocation(estadoListaUbis[index].altitud,estadoListaUbis[index].latitud,1,
+                    Geocoder.GeocodeListener { addresses ->  direccionesPosibles = addresses})
+            }else{
+                direccionesPosibles = gecoder.getFromLocation(estadoListaUbis[index].altitud,estadoListaUbis[index].latitud,1) as List<Address>
+            }
+
+            var text : String = direccionesPosibles.get(0).getAddressLine(0)
+
+            Text(""+text)
         }
     }
 }
+
+
 
 /*
 @OptIn(ExperimentalMaterial3Api::class)
