@@ -1,5 +1,10 @@
 package com.example.myapplication
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+
 class Tarjeta(nombre: String) {
     var nombre: String = nombre
     var descripcion: String = ""
@@ -14,4 +19,6 @@ class Tarjeta(nombre: String) {
         this.altitud = altitud
         this.latitud = latitud
     }
+
+
 }

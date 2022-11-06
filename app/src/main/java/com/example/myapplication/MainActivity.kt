@@ -30,11 +30,13 @@ import androidx.compose.ui.Alignment
 import com.example.myapplication.ui.theme.ListaMensajes
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition.*
 import kotlinx.coroutines.CoroutineScope
 import androidx.core.app.ActivityCompat
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.CameraPosition
@@ -132,11 +134,33 @@ fun mapa() {
 
 @Composable
 fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
-    LazyColumn {
+    var lanzarPopup by remember { mutableStateOf(false) }
+    var nombre by remember {mutableStateOf(TextFieldValue())}
+    var estaTarjeta by remember { mutableStateOf(Tarjeta(""))}
+
+    LazyColumn (Modifier.padding(start=8.dp)){
         items(estadoListaUbis.size) { index ->
-            Text(estadoListaUbis[index].nombre)
+            Button(onClick={
+                lanzarPopup=true
+                estaTarjeta=estadoListaUbis[index]
+                nombre=TextFieldValue(estadoListaUbis[index].nombre)
+            },
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+            ){
+                Text(estadoListaUbis[index].nombre)
+            }
+
         }
     }
+
+    if (lanzarPopup){
+        lanzarPopup=abrirTarjetaRellena(estaTarjeta, nombre)
+
+    }
+
+
 }
 
 /*
