@@ -19,6 +19,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -31,12 +32,15 @@ import com.google.maps.android.compose.MarkerState
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun abrirTarjetaRellena(context: Context, estaTarjetaVal:Tarjeta, nombreVal:TextFieldValue): Boolean {
+fun abrirTarjetaRellena(context: Context, estaTarjetaVal:Tarjeta, nombreVal:TextFieldValue, descVal:TextFieldValue): Boolean {
     var popupRelleno by remember { mutableStateOf(true) }
     var nombre by remember { mutableStateOf(nombreVal) }
+    var desc by remember { mutableStateOf(descVal) }
     var estaTarjeta by remember { mutableStateOf(estaTarjetaVal) }
     var textitoBonito=textoBonito(location = MainActivity.currentLocation)
     val maxCharNombre=50
+
+    var estadoTextoD by remember {mutableStateOf(TextFieldValue())}
 
     if (popupRelleno){
 
@@ -89,6 +93,42 @@ fun abrirTarjetaRellena(context: Context, estaTarjetaVal:Tarjeta, nombreVal:Text
                         )
                     )
 
+                    Text(
+                        text = "${nombre.text.length} / $maxCharNombre",
+                        textAlign = TextAlign.End,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 16.dp)
+                    )
+
+                    val maxCharD=120
+                    TextField(
+                        value = desc,
+                        onValueChange = { if (it.text.length <= maxCharD) desc = it },
+                        textStyle = LocalTextStyle.current.copy(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 20.sp,
+                            lineHeight=20.sp //Interlineado
+                        ),trailingIcon = {
+                            Icon(Icons.Default.Clear,
+                                contentDescription = "clear text",
+                                modifier = Modifier
+                                    .clickable {
+                                        desc=TextFieldValue("")
+                                    }
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent
+                        )
+                    )
+                    Text(
+                        text = "${desc.text.length} / $maxCharD",
+                        textAlign = TextAlign.End,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 16.dp)
+                    )
 
                     Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
                         OutlinedButton(
@@ -122,6 +162,7 @@ fun abrirTarjetaRellena(context: Context, estaTarjetaVal:Tarjeta, nombreVal:Text
                 ) {
                     TextButton(onClick = {
                         estaTarjeta.nombre=nombre.text
+                        estaTarjeta.descripcion=desc.text
                         popupRelleno=false
                     }) {Text("Confirm")}
                 }

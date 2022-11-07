@@ -200,6 +200,7 @@ fun mapa() {
 fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
     var lanzarPopup by remember { mutableStateOf(false) }
     var nombre by remember {mutableStateOf(TextFieldValue())}
+    var desc by remember {mutableStateOf(TextFieldValue())}
     var estaTarjeta by remember { mutableStateOf(Tarjeta("","",0.0,0.0))}
 
     LazyColumn (Modifier.padding(start=8.dp)){
@@ -221,6 +222,7 @@ fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
                 lanzarPopup=true
                 estaTarjeta=estadoListaUbis[index]
                 nombre=TextFieldValue(estadoListaUbis[index].nombre)
+                desc=TextFieldValue(estadoListaUbis[index].descripcion)
             },
                 Modifier
                     .fillMaxWidth()
@@ -237,7 +239,7 @@ fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
     }
 
     if (lanzarPopup){
-        lanzarPopup=abrirTarjetaRellena(MainActivity.appContext, estaTarjeta,nombre)
+        lanzarPopup=abrirTarjetaRellena(MainActivity.appContext, estaTarjeta,nombre,desc)
 
     }
 
