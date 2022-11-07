@@ -63,6 +63,7 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
     var popup by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(LatLng(0.0,0.0)) }
     var estadoTexto by remember {mutableStateOf(TextFieldValue())}
+    var estadoTextoD by remember {mutableStateOf(TextFieldValue())}
     var textitoBonito=textoBonito(location = MainActivity.currentLocation)
 
 
@@ -124,6 +125,7 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                             )
                         }
                         val maxChar=50
+                        val maxCharD=120
                         TextField(
                             value = estadoTexto,
                             onValueChange = { if (it.text.length <= maxChar) estadoTexto = it },
@@ -146,6 +148,34 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                         )
                         Text(
                             text = "${estadoTexto.text.length} / $maxChar",
+                            textAlign = TextAlign.End,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 16.dp)
+                        )
+
+                        TextField(
+                            value = estadoTextoD,
+                            onValueChange = { if (it.text.length <= maxCharD) estadoTextoD = it },
+                            textStyle = LocalTextStyle.current.copy(
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontSize = 20.sp,
+                                lineHeight=20.sp //Interlineado
+                            ),trailingIcon = {
+                                Icon(Icons.Default.Clear,
+                                    contentDescription = "clear text",
+                                    modifier = Modifier
+                                        .clickable {
+                                            estadoTextoD=TextFieldValue("")
+                                        }
+                                )
+                            },
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = Color.Transparent
+                            )
+                        )
+                        Text(
+                            text = "${estadoTextoD.text.length} / $maxCharD",
                             textAlign = TextAlign.End,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -178,9 +208,10 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                         modifier = Modifier.padding(all =0.dp)
                     ) {
                         TextButton(onClick = {
-                            var item = Tarjeta(estadoTexto.text,"",text.latitude,text.longitude)
+                            var item = Tarjeta(estadoTexto.text,estadoTextoD.text,text.latitude,text.longitude)
                             onAddTarjeta(item)
                             estadoTexto=TextFieldValue("")
+                            estadoTextoD=TextFieldValue("")
                             popup = false
                         }) {Text("Confirm")}
                     }
@@ -189,6 +220,7 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                     TextButton(
                         onClick = {
                             estadoTexto=TextFieldValue("")
+                            estadoTextoD=TextFieldValue("")
                             popup = false
                         },modifier = Modifier.padding(all =0.dp)
                     ) {
