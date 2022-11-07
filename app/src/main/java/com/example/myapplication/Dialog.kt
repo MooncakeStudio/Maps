@@ -164,7 +164,9 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontSize = 20.sp,
                                 lineHeight=20.sp //Interlineado
-                            ),trailingIcon = {
+                            ),
+                            label = {Text(text = "Description")},
+                            trailingIcon = {
                                 Icon(Icons.Default.Clear,
                                     contentDescription = "clear text",
                                     modifier = Modifier

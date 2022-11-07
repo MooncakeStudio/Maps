@@ -78,7 +78,9 @@ fun abrirTarjetaRellena(context: Context, estaTarjetaVal:Tarjeta, nombreVal:Text
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 30.sp,
                             lineHeight=30.sp //Interlineado
-                        ),trailingIcon = {
+                        ),
+                        label = {Text(text = "Title")},
+                        trailingIcon = {
                             Icon(
                                 Icons.Default.Clear,
                                 contentDescription = "clear text",
@@ -109,7 +111,9 @@ fun abrirTarjetaRellena(context: Context, estaTarjetaVal:Tarjeta, nombreVal:Text
                             color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp,
                             lineHeight=20.sp //Interlineado
-                        ),trailingIcon = {
+                        ),
+                        label = {Text(text = "Description")},
+                        trailingIcon = {
                             Icon(Icons.Default.Clear,
                                 contentDescription = "clear text",
                                 modifier = Modifier
