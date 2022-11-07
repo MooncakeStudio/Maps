@@ -61,7 +61,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MainActivity.appContext = applicationContext
+        val latitude = intent.getDoubleExtra("Lat",0.0)
+        val longitude = intent.getDoubleExtra("Long",0.0)
 
+        currentLocation = LatLng(latitude, longitude)
 
         setContent {
             MyApplicationTheme {
@@ -125,7 +128,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
         ) {
-            mapPosition()
             InterfazLista(estadoListaUbis)
             dialog(context = MainActivity.appContext, estadoListaUbis) { item ->
                 //var nuevaTarjeta = Tarjeta(item)
@@ -134,62 +136,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    val locationListener = android.location.LocationListener {
-            location -> currentLocation = LatLng(location.latitude,location.longitude); println("Por lo menos estoy aqui"); }
-
-
-    @SuppressLint("MissingPermission")
-    fun mapPosition() {
-        if(checkPermissions()){
-            if(locationEnabled()){
-                var location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                if(currentLocation.latitude.equals(1.35) && currentLocation.longitude.equals(103.87)){
-                    location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0L,0f,locationListener)
-                }
-
-            }else{
-                Toast.makeText(this,"Turn on location", Toast.LENGTH_SHORT).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
-        }else{
-            requestPermission()
-        }
-
-    }
-
     companion object{
-        private const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
+
         val instance = MainActivity()
-        lateinit var appContext :Context
+        lateinit var appContext : Context
         var canMap : Boolean = false
         var currentLocation: LatLng = LatLng(1.35, 103.87)
-    }
-
-    fun checkPermissions() : Boolean{
-        if(ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED){
-            return true
-        }
-        return false
-    }
-
-
-    fun locationEnabled() : Boolean{
-        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-
-
-    fun requestPermission(){
-        ActivityCompat.requestPermissions(this,
-            arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_REQUEST_ACCESS_LOCATION)
     }
 
     @SuppressLint("MissingPermission")

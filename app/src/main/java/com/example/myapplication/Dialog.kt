@@ -65,6 +65,7 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
     var estadoTexto by remember {mutableStateOf(TextFieldValue())}
 
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
