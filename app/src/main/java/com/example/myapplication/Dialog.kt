@@ -63,6 +63,7 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
     var popup by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(LatLng(0.0,0.0)) }
     var estadoTexto by remember {mutableStateOf(TextFieldValue())}
+    var textitoBonito=textoBonito(location = MainActivity.currentLocation)
 
 
     Column(
@@ -152,7 +153,7 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
 
                         Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
                             OutlinedButton(
-                                onClick ={ Compartir(context)},
+                                onClick ={ Compartir(context,estadoTexto.text, textitoBonito, MainActivity.currentLocation.latitude,MainActivity.currentLocation.longitude)},
                                 modifier= Modifier
                                     .background(Color.Transparent)
                                     .padding(top = 25.dp, bottom = 0.dp),
