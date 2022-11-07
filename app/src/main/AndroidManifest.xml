@@ -41,6 +41,10 @@
         <activity android:name=".ContactActivity"
             android:theme="@style/Theme.MyApplication">
         </activity>
+
+        <activity android:name=".CreditsActivity"
+            android:theme="@style/Theme.MyApplication">
+        </activity>
     </application>
 
 </manifest>

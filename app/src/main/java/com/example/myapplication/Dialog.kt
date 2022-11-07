@@ -131,7 +131,9 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontSize = 30.sp,
                                 lineHeight=30.sp //Interlineado
-                            ),trailingIcon = {
+                            ),
+                            label = {Text(text = "Title")},
+                            trailingIcon = {
                                 Icon(Icons.Default.Clear,
                                     contentDescription = "clear text",
                                     modifier = Modifier
@@ -142,7 +144,8 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                             },
                             colors = TextFieldDefaults.textFieldColors(
                                 backgroundColor = Color.Transparent
-                            )
+                            ),
+
                         )
                         Text(
                             text = "${estadoTexto.text.length} / $maxChar",

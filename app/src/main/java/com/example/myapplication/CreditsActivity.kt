@@ -17,20 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-class ContactActivity : ComponentActivity() {
+class CreditsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         setContent {
             MyApplicationTheme {
@@ -83,13 +79,13 @@ class ContactActivity : ComponentActivity() {
                             "Home" -> {
                                 finish()
                             }
-                            "Contact" -> scope.launch {
-                                scaffoldState.drawerState.close()
-                            }
-                            "Credits" -> {
-                                var intent = Intent(this@ContactActivity, CreditsActivity::class.java)
+                            "Contact" -> {
+                                var intent = Intent(this@CreditsActivity, ContactActivity::class.java)
                                 startActivity(intent)
                                 finish()
+                            }
+                            "Credits" -> scope.launch {
+                                scaffoldState.drawerState.close()
                             }
                         }
                     }
@@ -97,50 +93,35 @@ class ContactActivity : ComponentActivity() {
             }
         ) {
             Column(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Text(text = "Creado por MooncakeStudio")
-                Spacer(modifier = Modifier.size(30.dp))
+                Spacer(modifier = Modifier.size(5.dp))
                 Image(painter = painterResource(id = R.drawable.logo), contentDescription = "Logo")
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ){
-                    Text(text = "Contacto:")
-                    IconButton(
-                        onClick = {
-                            val correoIntent = Intent(Intent.ACTION_SENDTO)
-                            correoIntent.setType("message/rfc822")
-                            correoIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("mooncakestudiogames@gmail.com"))
-                            correoIntent.putExtra(Intent.EXTRA_SUBJECT,"App Ubicaciones")
-                            this@ContactActivity.startActivity(correoIntent)
-                        }
-                    )
-                    {
-                        Icon(imageVector = Icons.Default.Email, contentDescription = "Email")
-                    }
-
-                    IconButton(onClick = {
-                        val uri = Uri.parse("https://mooncakestudio.github.io/")
-                        val gitHubIntent = Intent(Intent.ACTION_VIEW,uri)
-                        this@ContactActivity.startActivity(gitHubIntent)
-                    }) {
-                        Icon(painter = painterResource(id = R.mipmap.github), contentDescription = "GitHub")
-                    }
-                    IconButton(onClick = {
-                        val uri = Uri.parse("https://linktr.ee/mooncakestudio")
-                        val linkTreeIntent = Intent(Intent.ACTION_VIEW,uri)
-                        this@ContactActivity.startActivity(linkTreeIntent)
-                    }) {
-                        Icon(painter = painterResource(id = R.drawable.ic_link), contentDescription = "LinkTree")
-                    }
+                Spacer(modifier = Modifier.size(10.dp))
+                Text(text = "Diseñado y Desarrollado por: ")
+                Spacer(modifier = Modifier.size(5.dp))
+                Text(text = "Pablo Álvarez de Lara Fernández")
+                Spacer(modifier = Modifier.size(2.dp))
+                Text(text = "Daniel Mayoral Fernández-Baíllo")
+                Spacer(modifier = Modifier.size(2.dp))
+                Text(text = "Javier Picado Hijón")
+                Spacer(modifier = Modifier.size(2.dp))
+                Text(text = "Marta Rodríguez Castillo")
+                Spacer(modifier = Modifier.size(10.dp))
+                Text(text = "Logo GitHub diseñado por PixelPerfect")
+                IconButton(onClick = {
+                    val uri = Uri.parse("https://www.flaticon.es/icono-gratis/github_779088?term=github&page=1&position=15&page=1&position=15&related_id=779088&origin=tag")
+                    val gitHubIntent = Intent(Intent.ACTION_VIEW,uri)
+                    this@CreditsActivity.startActivity(gitHubIntent)
+                }) {
+                    Icon(painter = painterResource(id = R.mipmap.github), contentDescription = "GitHub", modifier = Modifier.size(20.dp))
                 }
+                Row(){}
             }
 
         }
     }
 }
-

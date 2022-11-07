@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
                         Item(
                             id = "Home",
                             title = "Home",
-                            contentDescription = "A casita",
+                            contentDescription = "Menu principal",
                             icon = Icons.Default.Home
                         ),
                         Item(
@@ -114,6 +114,12 @@ class MainActivity : ComponentActivity() {
                             title = "Contacto",
                             contentDescription = "Ponganse en contacto",
                             icon = Icons.Default.Call
+                        ),
+                        Item(
+                            id="Credits",
+                            title= "Créditos",
+                            contentDescription = "Personas creadoras",
+                            icon = Icons.Default.Person
                         )
                     ),
                     onItemClick = {
@@ -122,6 +128,17 @@ class MainActivity : ComponentActivity() {
                             "Contact" -> {
                                 var intent = Intent(this@MainActivity, ContactActivity::class.java)
                                 startActivity(intent)
+                                scope.launch {
+                                    scaffoldState.drawerState.close()
+                                }
+
+                            }
+                            "Credits"->{
+                                var intent = Intent(this@MainActivity, CreditsActivity::class.java)
+                                startActivity(intent)
+                                scope.launch {
+                                    scaffoldState.drawerState.close()
+                                }
                             }
                         }
                     }

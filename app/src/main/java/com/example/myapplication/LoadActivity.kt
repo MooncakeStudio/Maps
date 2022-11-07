@@ -57,8 +57,9 @@ class LoadActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center
                 ){
                     Image(
-                        painter = painterResource(id = R.drawable.logomovil),
-                        contentDescription = "Logo Mooncake Studio"
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "Logo Mooncake Studio",
+                        modifier = Modifier.size(150.dp)
                     )
                     Text(text = "Cargando...")
                 }
