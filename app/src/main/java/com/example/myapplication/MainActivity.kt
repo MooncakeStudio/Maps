@@ -262,12 +262,13 @@ fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
                 Text(""+text)
             }
             }
+            Spacer(Modifier.padding(8.dp))
 
         }
     }
 
     if (lanzarPopup){
-        lanzarPopup=abrirTarjetaRellena(estaTarjeta, nombre)
+        lanzarPopup=abrirTarjetaRellena(MainActivity.appContext, estaTarjeta,nombre)
 
     }
 

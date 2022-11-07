@@ -17,7 +17,7 @@ fun Compartir(context: Context, nombre:String, direccion:String, latitude:Double
 
     val sendIntent: Intent = Intent().apply {
         action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, "Found this interesting location!\n"+ nombre + "\nFound at: "+direccion+"\nhttps://maps.google.com/?q="+latitude+","+longitude+",20z")
+        putExtra(Intent.EXTRA_TEXT, "Found this interesting location on FullMoon!\n"+ nombre + "\nFound at: "+direccion+"\nhttps://maps.google.com/?q="+latitude+","+longitude+",20z")
         //putExtra(Intent.EXTRA_TEXT, "Found this interesting location!\n"+ nombre + "\nFound at: "+direccion+"\nhttps://www.google.com/maps/@"+latitude+","+longitude+",20z")
 
 

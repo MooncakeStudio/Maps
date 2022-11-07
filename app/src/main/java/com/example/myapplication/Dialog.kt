@@ -151,6 +151,7 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                                 .padding(end = 16.dp)
                         )
 
+                        /*
                         Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
                             OutlinedButton(
                                 onClick ={ Compartir(context,estadoTexto.text, textitoBonito, MainActivity.currentLocation.latitude,MainActivity.currentLocation.longitude)},
@@ -168,7 +169,7 @@ fun dialog(context:Context,estadoListaUbis: List<Tarjeta>, onAddTarjeta: (Tarjet
                                     Text(text="Share",
                                         color = MaterialTheme.colorScheme.onSurface)                                }
                             }}
-
+                            */
                     }
                 },
                 confirmButton = {
