@@ -8,6 +8,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
@@ -50,8 +51,14 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.CameraPosition
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.Json.Default.decodeFromString
+import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -63,6 +70,7 @@ class MainActivity : ComponentActivity() {
         MainActivity.appContext = applicationContext
         val latitude = intent.getDoubleExtra("Lat",0.0)
         val longitude = intent.getDoubleExtra("Long",0.0)
+
 
         currentLocation = LatLng(latitude, longitude)
 
@@ -86,6 +94,7 @@ class MainActivity : ComponentActivity() {
         val scope = rememberCoroutineScope()
         var estadoListaUbis by remember { mutableStateOf(listOf<Tarjeta>()) }
 
+        estadoListaUbis = loadJson()
         /*Column(
         modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth()
     ) {*/
@@ -149,6 +158,9 @@ class MainActivity : ComponentActivity() {
             dialog(context = MainActivity.appContext, estadoListaUbis) { item ->
                 //var nuevaTarjeta = Tarjeta(item)
                 estadoListaUbis += listOf(item)
+                var tarjeta = TarjetaJson(item.nombre,item.descripcion,item.latitud,item.altitud)
+                listaTarjetas.add(tarjeta)
+                saveJson()
             }
         }
     }
@@ -159,7 +171,31 @@ class MainActivity : ComponentActivity() {
         lateinit var appContext : Context
         var canMap : Boolean = false
         var currentLocation: LatLng = LatLng(1.35, 103.87)
+        var listaTarjetas : ArrayList<TarjetaJson> = ArrayList<TarjetaJson>()
+
     }
+
+    fun saveJson(){
+        val json = Json.encodeToString(listaTarjetas)
+        File("../tarjetas.json").bufferedWriter().use {
+            out -> out.write(json)
+        }
+    }
+
+    @Composable
+    fun loadJson() : List<Tarjeta>{
+
+        val json : String = File(Uri.parse("app/src/main/assets/tarjetas.json").toString()).readText(Charsets.UTF_8)
+        val jsonList : ArrayList<TarjetaJson> = Json.decodeFromString<ArrayList<TarjetaJson>>(json)
+        var estadoListaUbis by remember { mutableStateOf(listOf<Tarjeta>()) }
+
+        jsonList.forEach{
+            var tarjeta = Tarjeta(it.nombre,it.descripcion,it.latitud,it.altitud)
+            estadoListaUbis += listOf(tarjeta)
+        }
+        return estadoListaUbis
+    }
+
 
     @SuppressLint("MissingPermission")
     fun devolverPosicion(context: Context):LatLng{

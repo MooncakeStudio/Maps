@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import kotlinx.serialization.Serializable
+
 class Tarjeta(nombre: String, descripcion: String, altitud: Double, latitud: Double) {
     var nombre: String = nombre
     var descripcion: String = descripcion
@@ -9,9 +11,15 @@ class Tarjeta(nombre: String, descripcion: String, altitud: Double, latitud: Dou
 
     // Constructor
 
-    /*constructor(nombre: String, descripcion: String, altitud: Int, latitud: Int) : this(nombre){
-        this.descripcion = descripcion
-        this.altitud = altitud
-        this.latitud = latitud
-    }*/
+
 }
+
+
+@Serializable
+data class TarjetaJson(
+    val nombre: String,
+    val descripcion: String,
+
+    val altitud: Double,
+    val latitud: Double
+)
