@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Gestor de Ubicaciones</string>
+    <string name="app_name">FullMoon</string>
+    <string name="app">FullMoon - Location Archive</string>
 </resources>
