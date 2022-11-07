@@ -1,14 +1,18 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -27,10 +31,11 @@ import com.google.maps.android.compose.MarkerState
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun abrirTarjetaRellena(estaTarjetaVal:Tarjeta,nombreVal:TextFieldValue): Boolean {
+fun abrirTarjetaRellena(context: Context, estaTarjetaVal:Tarjeta, nombreVal:TextFieldValue): Boolean {
     var popupRelleno by remember { mutableStateOf(true) }
     var nombre by remember { mutableStateOf(nombreVal) }
     var estaTarjeta by remember { mutableStateOf(estaTarjetaVal) }
+    var textitoBonito=textoBonito(location = MainActivity.currentLocation)
     val maxCharNombre=50
 
     if (popupRelleno){
@@ -83,6 +88,28 @@ fun abrirTarjetaRellena(estaTarjetaVal:Tarjeta,nombreVal:TextFieldValue): Boolea
                             backgroundColor = Color.Transparent
                         )
                     )
+
+
+                    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()){
+                        OutlinedButton(
+                            onClick ={ Compartir(context,nombre.text, textitoBonito, MainActivity.currentLocation.latitude,MainActivity.currentLocation.longitude)},
+                            modifier= Modifier
+                                .background(Color.Transparent)
+                                .padding(top = 25.dp, bottom = 0.dp),
+                            shape = RoundedCornerShape(50)
+                        ){
+                            Row{
+                                Icon(
+                                    Icons.Filled.Share, contentDescription="h",
+                                    tint= MaterialTheme.colorScheme.onSurface,
+                                    //modifier= Modifier.size(height=20.dp, width=300.dp)
+                                )
+                                Text(text="Share",
+                                    color = MaterialTheme.colorScheme.onSurface)                                }
+                        }}
+
+
+
                 }
 
             },
