@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "com.example.myapplication";
+option java_multiple_files = true;
+
+message TarjetaDS{
+    string nombre = 1;
+    string descripcion = 2;
+
+    double altitud = 3;
+    double latitud = 4;
+}
+
+message ListaTarjetas{
+    repeated TarjetaDS tarjetas = 1;
+}
+

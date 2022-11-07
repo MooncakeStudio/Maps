@@ -1,18 +1,11 @@
 package com.example.myapplication
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -26,18 +19,9 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
-import androidx.compose.ui.Alignment
-import com.example.myapplication.ui.theme.ListaMensajes
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.runtime.*
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition.*
-import kotlinx.coroutines.CoroutineScope
-import androidx.core.app.ActivityCompat
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.CameraPosition
+import androidx.compose.runtime.mutableStateOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -48,10 +32,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 var estadoListaUbis by remember { mutableStateOf(listOf<Tarjeta>()) }
+                var listaTarjetas: ArrayList<TarjetaModelClass> = ArrayList()
 
-                cargarMenuPrincipal(estadoListaUbis)
-                dialog(context=this@MainActivity,estadoListaUbis) { item ->
+                val stringJson: String = recogerJson(listaTarjetas, this@MainActivity)
+
+                cargarMenuPrincipal(estadoListaUbis, stringJson)
+                dialog(context = this@MainActivity, estadoListaUbis) { item ->
                     var nuevaTarjeta = Tarjeta(item)
+
                     estadoListaUbis += listOf(nuevaTarjeta)
                 }
             }
@@ -61,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalMaterial3Api
 @Composable
-fun cargarMenuPrincipal(estadoListaUbis: List<Tarjeta>) {
+fun cargarMenuPrincipal(estadoListaUbis: List<Tarjeta>, stringJson: String) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
@@ -107,7 +95,7 @@ fun cargarMenuPrincipal(estadoListaUbis: List<Tarjeta>) {
             )
         }
     ) {
-        InterfazLista(estadoListaUbis)
+        InterfazLista(estadoListaUbis, stringJson)
     }
 }
 /*}*/
@@ -131,12 +119,22 @@ fun mapa() {
 }
 
 @Composable
-fun InterfazLista(estadoListaUbis: List<Tarjeta>) {
+fun InterfazLista(estadoListaUbis: List<Tarjeta>, stringJson: String) {
+    var tarjetas: List<Tarjeta> = listOf()
     LazyColumn {
+        /*items(stringJson.size) { index ->
+            Text(stringJson[index].nombre)
+        }*/
         items(estadoListaUbis.size) { index ->
             Text(estadoListaUbis[index].nombre)
         }
     }
+}
+
+fun recogerJson (listaJson: ArrayList<TarjetaModelClass>, contexto: Context) : String {
+    var JsonString = Parser.getJsonFromAssets(contexto, "tarjetas.json")
+    //var lista: List<Tarjeta> = Parser.getListFromString(JsonString)
+    return JsonString
 }
 
 /*
@@ -153,3 +151,4 @@ fun preview() {
     }
 }
 */
+

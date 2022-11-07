@@ -1,0 +1,16 @@
+{
+  "tarjetas": [
+    {
+      "nombre": "tarjeta1",
+      "descripcion": "patatas en la tarjeta 1",
+      "latitud": 12.4,
+      "longitud": 34.56
+    },
+    {
+      "nombre": "tarjeta2",
+      "descripcion": "zanahorias en la tarjeta 2",
+      "latitud": 68.903,
+      "longitud": 483.90
+    }
+  ]
+}
