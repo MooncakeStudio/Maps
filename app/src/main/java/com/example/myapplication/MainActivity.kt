@@ -110,12 +110,6 @@ class MainActivity : ComponentActivity() {
                             icon = Icons.Default.Home
                         ),
                         Item(
-                            id = "Settings",
-                            title = "Settings",
-                            contentDescription = "La opsione",
-                            icon = Icons.Default.Settings
-                        ),
-                        Item(
                             id = "Contact",
                             title = "Contacto",
                             contentDescription = "Ponganse en contacto",
@@ -123,7 +117,13 @@ class MainActivity : ComponentActivity() {
                         )
                     ),
                     onItemClick = {
-                        println("Clicked on ${it.title}")
+                        when(it.id){
+                            "Home" -> println("Hola")
+                            "Contact" -> {
+                                var intent = Intent(this@MainActivity, ContactActivity::class.java)
+                                startActivity(intent)
+                            }
+                        }
                     }
                 )
             }

@@ -13,11 +13,21 @@ import android.util.MutableDouble
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -42,11 +52,17 @@ class LoadActivity : ComponentActivity() {
             MyApplicationTheme {
                 mapPosition()
                 Column(
+                    modifier = Modifier.size(1000.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ){
-                    Text(text = "Cargando")
+                    Image(
+                        painter = painterResource(id = R.drawable.logomovil),
+                        contentDescription = "Logo Mooncake Studio"
+                    )
+                    Text(text = "Cargando...")
                 }
+
             }
         }
     }

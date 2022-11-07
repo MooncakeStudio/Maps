@@ -37,6 +37,10 @@
         <activity android:name=".MainActivity"
             android:theme="@style/Theme.MyApplication">
         </activity>
+
+        <activity android:name=".ContactActivity"
+            android:theme="@style/Theme.MyApplication">
+        </activity>
     </application>
 
 </manifest>
